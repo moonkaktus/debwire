@@ -1,0 +1,43 @@
+- hosts: all
+  tasks:
+    - name: Install python3-apt
+      apt:
+        name: "python3-apt"
+        state: present
+
+    - name: install sudo
+      apt:
+        name: sudo
+        state: present
+
+    - name: add default user
+      user:
+       name: me
+       password: $6$VPRVaebItLB5g642$/zF7NpZiuEHttYnFTngTChGMD/TqzlsWdA2TotHKxZN4bVMsv8CSatdrYwY7apwF7QnIGJhBwwvOpN8yuoCJT/
+       shell: /bin/bash
+       create_home: yes
+       group: sudo
+       append: yes
+
+    - name: add ssh key
+      authorized_key:
+        user: me
+        state: present
+        key: "{{ lookup('file', '/home/me/.ssh/virty.pub') }}"
+
+    - name: disable_root_login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: PermitRootLogin no
+
+    - name: disable password authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication'
+        line: PasswordAuthentication no
+    
+    - name: reload sshd
+      systemd:
+        name: sshd
+        state: reloaded

@@ -1,0 +1,14 @@
+- name: create swapfile
+  script: files/createswap.sh
+
+- name: fstab entry
+  lineinfile:
+    path: /etc/fstab
+    line: '# swapfile'
+    state: present
+
+- name: fstab entry
+  lineinfile:
+    path: /etc/fstab
+    line: '/swapfile none swap defaults 0 0'
+    state: present

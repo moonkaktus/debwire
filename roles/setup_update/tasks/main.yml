@@ -1,0 +1,9 @@
+---
+
+- name: create swapfile
+  include: swapfile.yml
+  tags: swapfile
+
+- name: setup_update 
+  include: setup_update.yml
+  tags: setup_update

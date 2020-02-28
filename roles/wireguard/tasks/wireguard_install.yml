@@ -1,0 +1,8 @@
+- name: eneable wireguard repo
+  script: files/wireguard_package_enable.sh
+
+- name: Install wireguard packages
+  apt:
+    name: wireguard
+    state: present
+    update_cache: true

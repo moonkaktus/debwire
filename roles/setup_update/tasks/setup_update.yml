@@ -1,0 +1,62 @@
+---
+- name: Update system
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: additional packages
+  apt:
+    name:
+      - ca-certificates
+      - tmux
+      - vim
+      - mosh
+      - restic
+      - rsync
+      - mlocate
+    state: present
+
+- name: copy tmux config
+  copy:
+    src: /home/me/.tmux.conf
+    dest: /home/me/.tmux.conf
+    owner: me
+
+- name: Install firewalld
+  apt:
+    name:
+      - firewalld
+      - nftables
+    state: present
+
+- name: Enable firewalld
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+
+- name: Set default zone to external
+  command: firewall-cmd --set-default-zone=external
+
+- name: add default interface
+  firewalld:
+    interface: "{{ ansible_default_ipv4.interface }}"
+    zone: external
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+- name: reboot server
+  reboot:
+
+- name: Change backend to nftables
+  replace:
+    path: /etc/firewalld/firewalld.conf
+    backup: yes
+    after: 'FirewallBackend='
+    regexp: 'iptables'
+    replace: 'nftables'
+
+- name: reboot server
+  reboot:
+

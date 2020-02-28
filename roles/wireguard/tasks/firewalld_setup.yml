@@ -1,0 +1,51 @@
+# enable IPv4 forwarding
+- name: Enable IPv4 traffic forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Enable IPv4 forwarding continued
+  command: echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# Configure firewalld rules
+- name: Add network interface to default zone
+  firewalld:
+    interface: "{{ ansible_default_ipv4.interface }}"
+    zone: external
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+- name: Configure firewalld
+  firewalld:
+    port: 51820/udp
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+- name: Add wireguard interface to firewalld
+  firewalld:
+    interface: wg0-server
+    zone: home
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+- name: open port
+  firewalld:
+    zone: home
+    port: 51820/udp
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+- name: enable masquerade
+  firewalld:
+    zone: home
+    state: enabled
+    masquerade: yes
+    permanent: yes
+    immediate: yes

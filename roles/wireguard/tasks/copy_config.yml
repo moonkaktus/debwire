@@ -1,0 +1,5 @@
+- name: Copy server configuration file
+  copy:
+    src: files/server-config.conf
+    dest: /etc/wireguard/wg0-server.conf
+    mode: '600'

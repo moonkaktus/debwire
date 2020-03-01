@@ -22,6 +22,11 @@
     - wireguard
     - wireguard_firewalld
 
+- name: Setup knot-resolver
+  include: knot-resolver.yml
+  tags:
+    knot
+
 # - name: Setup unbound dns service
 #   include: unbound.yml
 #   tags:

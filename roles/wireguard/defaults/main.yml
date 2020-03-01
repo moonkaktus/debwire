@@ -2,7 +2,7 @@
 # defaults file for wireguard_role
 
 #Declare the VPN subnet
-vpn_network: '192.168.3'
+vpn_network: '192.168.2'
 
 #Declare the VPN server port
 vpn_port: '51820'

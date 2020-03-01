@@ -1,0 +1,28 @@
+- name: install knot repo
+  apt:
+    deb: https://secure.nic.cz/files/knot-resolver/knot-resolver-release.deb
+
+- name: install knot-resolver
+  apt:
+    update_cache: yes
+    name: knot-resolver
+    state: latest
+
+- name: copy config file
+  copy:
+    src: files/kresd.conf
+    dest: /etc/knot-resolver/kresd.conf
+
+- name: open port 53
+  firewalld:
+    service: dns
+    permanent: yes
+    zone: home
+    state: enabled
+
+- name: enable knot service
+  systemd:
+    name: kresd@1.service
+    state: restarted
+    enabled: yes
+

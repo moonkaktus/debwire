@@ -3,3 +3,7 @@
 
 # - name: coredns
 #   include: coredns.yml
+
+- name: shaarli
+  include: shaarli.yml
+  tags: shaarli

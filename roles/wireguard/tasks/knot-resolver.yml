@@ -17,6 +17,7 @@
   firewalld:
     service: dns
     permanent: yes
+    immediate: yes
     zone: home
     state: enabled
 

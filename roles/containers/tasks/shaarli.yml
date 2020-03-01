@@ -1,0 +1,26 @@
+- name: create data volume
+  docker_volume:
+    name: shaarli-data
+
+- name: create cache volume
+  docker_volume:
+    name: shaarli-cache
+
+- name: create shaarli container
+  docker_container:
+    name: shaarli
+    image: shaarli/shaarli:master
+    volumes:
+      - shaarli-cache:/var/www/shaarli/cache
+      - shaarli-data:/var/www/shaarli/data
+    published_ports:
+      - 192.168.2.1:8079:80
+    restart_policy: always
+
+- name: open port
+  firewalld:
+    port: 8079/tcp
+    zone: home
+    state: enabled
+    permanent: yes
+    immediate: yes

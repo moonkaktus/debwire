@@ -21,6 +21,14 @@
     zone: home
     state: enabled
 
+- name: open port 53
+  firewalld:
+    service: dns
+    permanent: yes
+    immediate: yes
+    zone: external
+    state: enabled
+
 - name: enable knot service
   systemd:
     name: kresd@1.service
